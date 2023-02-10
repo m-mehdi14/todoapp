@@ -1,91 +1,70 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
+import { Button , Flex , ListItem , UnorderedList , Input , Text } from "@chakra-ui/react";
+import { useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+export default function Home (){
+  const [ task , setTask] = useState(["1","2","3"])
+  const [item , setItem] = useState("")
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+  function removeitem(taskname:string){
+     setTask(task.filter((task)=>{
+      return task != taskname
+     }))
+  }
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+  
+  function Additem(){
+    if(item != "" && !task.includes(item)){
+      const temporary = task;
+      temporary.push(item);
+      setTask(temporary)
+      setItem("")
+    }
+    
+  }
+  return(
+   <div>
+    <h1 className="heading">Todo App</h1>
+    <Flex justifyContent={"center"}
+    alignItems={"center"}
+    height={"100"}
+    width={"100"}
+    flexDirection={"column"}
+    >
+      <Input placeholder="Task Name"
+      value={item}
+      color={"black"}
+      onChange={(e)=>{
+        setItem(e.target.value)
+      }}>
+      </Input>
+      <Button onClick={Additem}>Add Task</Button>
+    </Flex>
+      <UnorderedList>
+        {
+          task.map((t)=>{
+            return(
+              <ListItem key={t}>
+                {t}
+                <Button
+                ml={"10"}
+                background={"black"}
+                color={"white"}
+                onClick={()=>{
+                  return removeitem(t)
+                }}
+                >
+                  Delete
+                </Button>
+              </ListItem>
+            )
+          })
+        }
+      </UnorderedList>
+   </div>
   )
+
+
 }
